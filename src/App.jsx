@@ -11,13 +11,45 @@ function App() {
   const passwordGen = useCallback(() => {
     let pass = "";
     let str = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+    let numStr = "0123456789";
+    let charStr = "!@#$%^&*()";
 
-    if (numAllowed) str += "0123456789";
-    if (charAllowed) str += "!@#$%^&*()";
+    if (numAllowed) str += numStr;
+    if (charAllowed) str += charStr;
 
     for (let index = 1; index <= length; index++) {
       let char = Math.floor(Math.random() * str.length + 1);
       pass += str.charAt(char);
+    }
+
+    let prevPasswordIndex = 0;
+    if (numAllowed) {
+      prevPasswordIndex = Math.floor(Math.random() * length + 1);
+      let numberRandom = numStr.charAt(
+        Math.floor(Math.random() * numStr.length + 1)
+      );
+
+      pass =
+        pass.slice(0, prevPasswordIndex) +
+        numberRandom +
+        pass.slice(prevPasswordIndex + 1, length);
+    }
+
+    if (charAllowed) {
+      let passwordIndex = 0;
+      passwordIndex = Math.floor(Math.random() * length + 1);
+      do {
+        passwordIndex = Math.floor(Math.random() * length + 1);
+      } while (prevPasswordIndex == passwordIndex);
+
+      let characterRandom = numStr.charAt(
+        Math.floor(Math.random() * charStr.length + 1)
+      );
+
+      pass =
+        pass.slice(0, passwordIndex) +
+        characterRandom +
+        pass.slice(passwordIndex + 1, length);
     }
 
     setPass(pass);
@@ -89,7 +121,7 @@ function App() {
                   setCharAllowed(!charAllowed);
                 }}
               />
-              <label>Characters</label>
+              <label>Special Char</label>
             </div>
           </div>
         </div>
